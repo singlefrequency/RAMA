@@ -1,14 +1,8 @@
 #Import various libraries that are needed for this script to work
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy import integrate
 import integration_library as IL
 
-%matplotlib inline
-%config InlineBackend.figure_format = 'retina'
 import sys, platform, os
-import matplotlib
-from matplotlib import pyplot as plt
 import numpy as np
 
 #Define output folders for both neutrino and regular cases respectively
