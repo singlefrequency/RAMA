@@ -5,23 +5,28 @@ import integration_library as IL
 import sys, platform, os
 import numpy as np
 
+#Show script logo
+file_logo = open('logo.txt', 'r')
+file_logo = file_logo.read()
+print(file_logo+"\n")
+
 #Define output folders for both neutrino and regular cases respectively
-output_nu   = ""
-output_nonu = ""
+output_nu   = str(input("Directory for reps transfer functions with massive neutrino: "))
+output_nonu = str(input("Directory for reps transfer functions without neutrino: "))
 
 #Define folders for matter power spectrum output of reps
-output_spectrum_nonu = ""
-output_spectrum_nu   = ""
+output_spectrum_nonu =  str(input("Directory for reps power spectra with massive neutrino: "))
+output_spectrum_nu   =  str(input("Directory for reps power spectra with massive neutrino: "))
 
 #Define initial redshift and number of outputs (note that redshifts at which outputs are present should be created using
 # numpy.linspace() suite, for example, if outputs are present up to z=49 and there are 500 outputs, use 
 # np.linspace(0,49,500) in reps)
-zin = 49
-output_number = 500
+zin = int("Initial redshift (must be an integer): ")
+output_number = int("Number of reps outputs")
 arr = np.linspace(0,zin,output_number)
 
 #Define output file name
-output_filename = ""
+output_filename = str("File name for output .txt")
     
 scaled_redshift = []
 scaled_length = []
@@ -90,7 +95,7 @@ for counter in range(output_number):
         mean_arr.append(mean)
 
 #Create file to write all outputs
-with open(str(output_filename), "a") as outputfile:
+with open(str(output_filename)+".txt", "a") as outputfile:
     outputfile.write("#zo, s, difference \n")
     for i in range(len(mean_arr)):
         outputfile.write(str(scaled_redshift[i])+","+str(scaled_length[i])+","+str(mean_arr[i])+"\n")
