@@ -7,3 +7,4 @@ rescaling procedure, please refer to the paper https://doi.org/10.1093/mnras/stz
 modified (by inputting folders of reps output (for both CAMB transfer functions and matter power spectrum) and by specifying the filename for .txt file, produced by RAMA). There are a couple of python packages that are required for this script to work:
 - `numpy`
 + `Pylians3`
+To use the script, simply run `python3 RAMA.py` and pass required input parameter. This package was properly tested on both MacOS and Ubuntu 22.04 systems. If there are some problems in the code, please open new issue on this GitHub repo or write to my email oleksii.sokoliuk@mao.kiev.ua.
