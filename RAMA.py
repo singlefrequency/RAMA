@@ -1,4 +1,5 @@
-#Import various libraries that are needed for this script to work
+#Import various libraries that are needed for this script to work (generally, we only need to import numpy, Pylians3 
+# integration library and a couple of standart python suites, such as sys, os etc.)
 import numpy as np
 import integration_library as IL
 
@@ -27,10 +28,6 @@ arr = np.linspace(0,zin,output_number)
 
 #Define output file name
 output_filename = str("File name for output .txt")
-    
-scaled_redshift = []
-scaled_length = []
-mean_arr = []
 
 #Import present time values if linear growth rates for both neutrino and regular cosmologies
 kh = np.loadtxt(str(output_nu)+"/_rescaled_transfer_z0.0000.txt")[:,0]
@@ -64,39 +61,54 @@ def target_sigma(R):
         
 
 #Iterate through reps outputs
-for counter in range(output_number):
-    kh = np.loadtxt("output_nu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,0]
-    Delta_nonu_target = np.loadtxt("output_nu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,7]
-    Delta_tot_target = np.loadtxt("output_nu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,6]
-    Delta_nonu_original = np.loadtxt("output_nonu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,7]
-    Delta_tot_original = np.loadtxt("output_nonu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,6]
+def derive_sigma(k0):
     
-    pk_target = ((Delta_nonu_target/Delta_nonu_targetz0)**2*Pk0_nu)
-    pk_target_tot = ((Delta_tot_target/Delta_tot_targetz0)**2*Pk0_nu)
-    pk_original = ((Delta_nonu_original/Delta_nonu_originalz0)**2*Pk0_nonu)
-    pk_original_tot = ((Delta_tot_original/Delta_tot_originalz0)**2*Pk0_nonu)
+    scaled_redshift = []
+    scaled_length = []
+    mean_arr = []
+
+    for counter in range(output_number):
+        kh = np.loadtxt("output_nu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,0]
+        Delta_nonu_target = np.loadtxt("output_nu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,7]
+        Delta_tot_target = np.loadtxt("output_nu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,6]
+        Delta_nonu_original = np.loadtxt("output_nonu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,7]
+        Delta_tot_original = np.loadtxt("output_nonu/_rescaled_transfer_z" + str(format(arr[counter], '.4f')) + ".txt")[:,6]
     
-    #Array for real-space radial coordinate, that runs from R1=1 to R2=10
-    RR = np.linspace(1,10,10)
+        pk_target = ((Delta_nonu_target/Delta_nonu_targetz0)**2*Pk0_nu)
+        pk_target_tot = ((Delta_tot_target/Delta_tot_targetz0)**2*Pk0_nu)
+        pk_original = ((Delta_nonu_original/Delta_nonu_originalz0)**2*Pk0_nonu)
+        pk_original_tot = ((Delta_tot_original/Delta_tot_originalz0)**2*Pk0_nonu)
     
-    #Array for scaling, we assume that s in [0.5,1.5]
-    arr2=np.linspace(0.5,1.5,100)
-    for y in range(100):
-        mean = 0
-        for x in range(10):
-            mean+=(np.abs((sigma(k0,pk_original,RR[x]/arr2[y])-target_sigma(RR[x]))/target_sigma(RR[x])*100))
+        #Array for real-space radial coordinate, that runs from R1=1 to R2=10
+        RR = np.linspace(1,10,10)
+    
+        #Array for scaling, we assume that s in [0.5,1.5]
+        arr2=np.linspace(0.5,1.5,100)
+        for y in range(100):
+            mean = 0
+            for x in range(10):
+                mean+=(np.abs((sigma(k0,pk_original,RR[x]/arr2[y])-target_sigma(RR[x]))/target_sigma(RR[x])*100))
             
-        #Calculate mean value for sigma(R) percentage difference over all R
-        mean = np.sum(mean)/len(RR)
+            #Calculate mean value for sigma(R) percentage difference over all R
+            mean = np.sum(mean)/len(RR)
         
-        #Write scaled length, redshift and mean percentage difference to an array
-        scaled_redshift.append(arr[counter])
-        scaled_length.append(arr2[y])
-        mean_arr.append(mean)
+            #Write scaled length, redshift and mean percentage difference to an array
+            scaled_redshift.append(arr[counter])
+            scaled_length.append(arr2[y])
+            mean_arr.append(mean)
+
+    return scaled_redshift, scaled_length, mean_arr
 
 #Create file to write all outputs
-with open(str(output_filename)+".txt", "a") as outputfile:
-    outputfile.write("#zo, s, difference \n")
-    for i in range(len(mean_arr)):
-        outputfile.write(str(scaled_redshift[i])+","+str(scaled_length[i])+","+str(mean_arr[i])+"\n")
-    outputfile.close()
+def write_output(scaled_redshift,scaled_length,mean_arr,output_filename):
+    with open(str(output_filename)+".txt", "a") as outputfile:
+        outputfile.write("#zo, s, difference \n")
+        for i in range(len(mean_arr)):
+            outputfile.write(str(scaled_redshift[i])+","+str(scaled_length[i])+","+str(mean_arr[i])+"\n")
+        outputfile.close()
+
+def main():
+    scaled_redshift, scaled_length, mean_arr = derive_sigma(k0)
+    write_output(scaled_redshift,scaled_length,mean_arr,output_filename)
+    
+main()
