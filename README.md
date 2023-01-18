@@ -8,4 +8,4 @@ modified (by inputting folders of reps output (for both CAMB transfer functions 
 - `numpy`
 + `Pylians3`
 
-To use the script, simply run `python3 RAMA.py` and pass all required input parameters, mentioned above. This package was properly tested on both MacOS and Ubuntu 22.04 systems. If there are some problems in the code, please open new issue on this GitHub repo or write to my email oleksii.sokoliuk@mao.kiev.ua.
+To use the script, simply run `python3 RAMA.py` and pass all required input parameters, mentioned above. This package was properly tested on both MacOS Monterey and Ubuntu 22.04 systems. If there are some problems in the code, please open new issue on this GitHub repo or write to my email oleksii.sokoliuk@mao.kiev.ua.
