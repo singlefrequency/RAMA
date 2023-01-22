@@ -29,7 +29,7 @@ arr = np.linspace(0,zin,output_number)
 #Define output file name
 output_filename = str("File name for output .txt")
 
-#Import present time values if linear growth rates for both neutrino and regular cosmologies
+#Import present time values of linear growth rates for both neutrino and regular cosmologies
 kh = np.loadtxt(str(output_nu)+"/_rescaled_transfer_z0.0000.txt")[:,0]
 Delta_nonu_targetz0 = np.loadtxt(str(output_nu)+"/_rescaled_transfer_z0.0000.txt")[:,7]
 Delta_tot_targetz0 = np.loadtxt(str(output_nu)+"/_rescaled_transfer_z0.0000.txt")[:,6]
