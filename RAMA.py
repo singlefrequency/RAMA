@@ -84,7 +84,7 @@ def derive_sigma(k0):
     
         #Array for scaling, we assume that s in [0.5,1.5]
         arr2=np.linspace(0.5,1.5,100)
-        for y in range(100):
+        for y in range(len(arr2)):
             mean = 0
             for x in range(10):
                 mean+=(np.abs((sigma(k0,pk_original,RR[x]/arr2[y])-target_sigma(RR[x]))/target_sigma(RR[x])*100))
